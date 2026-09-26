@@ -68,4 +68,42 @@ describe("SwapRoute", () => {
     expect(screen.getByText("Failed")).toBeInTheDocument();
     expect(screen.getByText("boom")).toBeInTheDocument();
   });
+
+  // ─── Issue #739 acceptance criteria ─────────────────────────────────────────
+  it("renders the suggestion list with each swap's assets and amounts", () => {
+    render(<SwapRoute swaps={[SWAP, { ...SWAP, from: "USDC", to: "BTC" }]} />);
+
+    // One list row per suggestion.
+    expect(screen.getAllByRole("listitem")).toHaveLength(2);
+    // Header reflects the number of swaps.
+    expect(screen.getByText(/2 swaps to reach target/i)).toBeInTheDocument();
+    // Asset codes rendered for each leg of the route.
+    expect(screen.getAllByText("XLM").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("USDC").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("BTC").length).toBeGreaterThan(0);
+  });
+
+  it("shows the error message for a failed swap", () => {
+    render(
+      <SwapRoute
+        swaps={[SWAP]}
+        statuses={["failed"]}
+        errors={["Insufficient liquidity"]}
+      />,
+    );
+
+    expect(screen.getByText("Failed")).toBeInTheDocument();
+    expect(screen.getByText("Insufficient liquidity")).toBeInTheDocument();
+  });
+
+  it("formats the slippage percentage correctly", () => {
+    // slippagePct: 0.5 → formatPct → "0.50%" (distinct from the 0.30% swap fee).
+    render(<SwapRoute swaps={[SWAP]} />);
+
+    expect(screen.getByText("Slippage")).toBeInTheDocument();
+    // Appears on the row metric and again in the weighted-average footer cell.
+    expect(screen.getAllByText("0.50%").length).toBeGreaterThan(0);
+    // The swap fee uses a different format so the two are not conflated.
+    expect(screen.getByText("0.30%")).toBeInTheDocument();
+  });
 });

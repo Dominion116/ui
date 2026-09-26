@@ -15,7 +15,6 @@ test-results
 *.local
 
 # Editor directories and files
-.vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
@@ -25,3 +24,4 @@ test-results
 *.sln
 *.sw?
 fix.md
+config.bat

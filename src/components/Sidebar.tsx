@@ -25,7 +25,8 @@ export type NavSection =
   | "charts"
   | "farming"
   | "budget"
-  | "nfts";
+  | "nfts"
+  | "governance";
 
 const NAV: { id: NavSection; label: string; icon: IconSvgElement }[] = [
   { id: "wallet", label: "Wallet", icon: Wallet01Icon },
@@ -42,6 +43,7 @@ const NAV: { id: NavSection; label: string; icon: IconSvgElement }[] = [
   { id: "farming", label: "Yield Farming", icon: CodeIcon },
   { id: "budget", label: "Budget Manager", icon: Wallet01Icon },
   { id: "nfts", label: "NFTs", icon: Blockchain01Icon },
+  { id: "governance", label: "Governance", icon: User02Icon },
 ];
 
 interface SidebarProps {
